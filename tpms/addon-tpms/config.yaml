@@ -1,0 +1,27 @@
+name: Motorhome TPMS
+version: "0.1.0"
+slug: motorhome_tpms
+description: Read the ATOTO AC-UTP1 USB TPMS receiver and publish MQTT entities
+url: https://github.com/grantie32/HA-RV-Apps/tree/main/tpms
+arch:
+  - aarch64
+  - armv7
+  - amd64
+startup: application
+boot: auto
+init: false
+usb: true
+devices:
+  - /dev/ttyUSB0
+options:
+  serial_device: /dev/ttyUSB0
+  mqtt_host: core-mosquitto
+  mqtt_port: 1883
+  mqtt_username: ""
+  mqtt_password: ""
+schema:
+  serial_device: str
+  mqtt_host: str
+  mqtt_port: port
+  mqtt_username: str
+  mqtt_password: password

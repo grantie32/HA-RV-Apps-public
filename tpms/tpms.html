@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#071321">
+  <title>TPMS · Motorhome</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: dark; }
+    body { font-family: 'DM Sans', sans-serif; background: radial-gradient(ellipse at 70% 40%, #162d4a, #0b1b2d 48%, #06111e); }
+    .glass { background: linear-gradient(145deg, #1e3754c7, #0d2036c7); border: 1px solid #aacdef22; box-shadow: inset 0 1px #ffffff0b, 0 16px 48px #0003; backdrop-filter: blur(18px); }
+    .soft { background: #05122057; border: 1px solid #b1cfed14; }
+    .muted { color: #94a9bf; }
+    .caps { letter-spacing: .16em; }
+    .navitem { width: 58px; min-height: 54px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; border-radius: 15px; color: #8fa4ba; }
+    .navitem span { font-size: 19px; line-height: 1; }
+    .navitem small { font-size: 8px; letter-spacing: .06em; }
+    .navitem:hover, .navitem.active { color: #e7f2ff; background: #9fc6eb1f; }
+    .tpms-stage { display: grid; grid-template-columns: minmax(0, .9fr) minmax(280px, 1.4fr) minmax(0, .9fr); grid-template-rows: minmax(0, 1fr) minmax(0, 1.25fr) minmax(0, 1fr); gap: 12px; }
+    .tpms-card { position: relative; z-index: 3; width: auto; min-height: 0; overflow: hidden; align-self: center; }
+    .tpms-card::after { content: ''; position: absolute; top: 58%; height: 2px; width: 54px; background: linear-gradient(90deg, #64d8ff, transparent); opacity: .72; }
+    .tpms-card.far::after { background: linear-gradient(90deg, #f4b46b, transparent); }
+    .rear-far { grid-column: 1; grid-row: 1; }
+    .front-far { grid-column: 3; grid-row: 1; }
+    .rear-near { grid-column: 1; grid-row: 3; }
+    .front-near { grid-column: 3; grid-row: 3; }
+    .rear-near::after, .rear-far::after { right: -54px; transform: rotate(18deg); transform-origin: left; }
+    .front-near::after, .front-far::after { left: -54px; transform: rotate(-18deg); transform-origin: right; }
+    .rear-far, .rear-near { transform: translateX(34px); }
+    .front-far, .front-near { transform: translateX(-34px); }
+    .vehicle-art { position: relative; grid-column: 1 / 4; grid-row: 1 / 4; width: min(780px, 82%); justify-self: center; min-width: 0; min-height: 0; display: flex; align-items: center; justify-content: center; z-index: 1; }
+    .vehicle-art img { width: 100%; height: 100%; object-fit: contain; }
+    .wheel-target { position: absolute; z-index: 2; width: 34px; height: 34px; border-radius: 999px; border: 2px solid #75ddff; background: #0a2035b8; box-shadow: 0 0 0 6px #64d8ff18, 0 0 18px #64d8ff66; }
+    .wheel-target.far { border-color: #f4b46b; box-shadow: 0 0 0 7px #f4b46b18, 0 0 22px #f4b46b55; }
+    .wheel-rear-near { left: 24%; bottom: 19%; }
+    .wheel-front-near { right: 22%; bottom: 19%; }
+    .wheel-rear-far { left: 29%; bottom: 33%; }
+    .wheel-front-far { right: 27%; bottom: 33%; }
+    .receiver-card { display: grid; grid-template-columns: auto minmax(120px, .8fr) minmax(180px, 1.2fr) minmax(120px, .8fr) minmax(160px, 1fr); align-items: center; gap: 14px; background: #102944e8; backdrop-filter: blur(10px); }
+    .receiver-card .receiver-label, .receiver-card .receiver-meta, .receiver-card .receiver-status, .receiver-card .receiver-reading { margin: 0; }
+    @media (max-width: 900px) {
+      .tpms-stage { display: flex; flex-direction: column; min-height: 0 !important; }
+      .tpms-card { position: relative; inset: auto; width: auto; transform: none; }
+      .tpms-card::after, .wheel-target { display: none; }
+      .vehicle-art { order: 2; width: 100%; min-height: 230px; }
+      .receiver-card { order: 3; width: 100%; grid-template-columns: auto 1fr; gap: 8px 12px; }
+      .receiver-card .receiver-icon { display: grid; }
+    }
+    @media (min-width: 901px) {
+      #tpms-content > section { min-height: 650px; }
+      #tpms-content .tpms-stage { height: 430px; min-height: 0 !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 antialiased">
+  <div class="mx-auto flex min-h-screen max-w-[1440px] gap-4 px-3 py-4 sm:px-6 lg:px-8">
+    <aside id="sidebar" class="hidden mt-[74px] self-start w-[78px] shrink-0 flex-col items-center justify-between rounded-[30px] border border-white/10 bg-slate-900/45 py-5 md:flex">
+      <nav class="flex flex-col gap-2" aria-label="Main navigation">
+        <a href="index.html?v=20261004-mobile-nav-v1" class="navitem"><span>⌂</span><small>HOME</small></a>
+        <a href="security.html?v=20261004-mobile-nav-v1" class="navitem"><span>◇</span><small>SECURITY</small></a>
+        <a href="energy.html?v=20261004-mobile-nav-v1#energy" class="navitem"><span>ϟ</span><small>ENERGY</small></a>
+        <a href="utilities.html?v=20261004-mobile-nav-v1" class="navitem"><span>◈</span><small>UTILITIES</small></a>
+        <a href="weather.html?v=20261004-mobile-nav-v1" class="navitem"><span>☀</span><small>WEATHER</small></a>
+        <a href="tpms.html?v=20261005-tpms-layout-v1" class="navitem active" aria-current="page"><span>◉</span><small>TPMS</small></a>
+      </nav>
+      <div>
+        <a href="#" data-ha-path="/" class="navitem"><span>☼</span><small>HA MODE</small></a>
+        <a href="#" data-ha-path="/config" class="navitem"><span>☷</span><small>SETTINGS</small></a>
+      </div>
+    </aside>
+
+    <main id="tpms-content" class="min-w-0 flex-1">
+      <header class="glass mb-3 flex min-h-[62px] flex-wrap items-center justify-between gap-3 rounded-[24px] px-5 py-3 sm:px-7">
+        <div class="flex items-center gap-6">
+          <time id="clock" class="text-2xl sm:text-3xl">--:--</time>
+          <div class="hidden border-l border-white/10 pl-6 sm:block">
+            <h1 class="font-semibold">Motorhome</h1>
+            <p id="status-summary" class="text-xs muted">Tyre pressure and temperature watch</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="weather-icon" class="text-2xl" aria-hidden="true">☁</span>
+          <span id="weather-temp" class="text-2xl font-light">--°</span>
+          <div class="text-xs"><div><span id="weather-condition">Weather</span> · <span id="weather-location">Home</span></div><div class="muted">Humidity <span id="weather-humidity">--</span>, wind <span id="weather-wind">--</span></div></div>
+          <span id="connection" class="rounded-full border border-amber-200/20 bg-amber-300/10 px-3 py-1 text-[10px] tracking-widest">CONNECTING</span>
+        </div>
+      </header>
+      <nav class="mb-3 grid grid-cols-3 gap-1.5 rounded-2xl border border-white/10 bg-slate-900/45 p-2 md:hidden" aria-label="Mobile motorhome pages">
+        <a href="index.html?v=20261004-mobile-nav-v1" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5"><span aria-hidden="true">⌂</span><span>HOME</span></a>
+        <a href="security.html?v=20261004-mobile-nav-v1" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5"><span aria-hidden="true">◇</span><span>SECURITY</span></a>
+        <a href="energy.html?v=20261004-mobile-nav-v1#energy" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5"><span aria-hidden="true">ϟ</span><span>ENERGY</span></a>
+        <a href="utilities.html?v=20261004-mobile-nav-v1" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5"><span aria-hidden="true">◈</span><span>UTILITIES</span></a>
+        <a href="weather.html?v=20261004-mobile-nav-v1" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5"><span aria-hidden="true">☀</span><span>WEATHER</span></a>
+        <a href="tpms.html?v=20261005-tpms-layout-v1" class="flex min-h-10 items-center justify-center gap-1.5 rounded-xl border border-white/5 px-1.5 text-[9px] font-medium text-slate-300 transition hover:bg-white/5 bg-sky-300/15 text-sky-100" aria-current="page"><span aria-hidden="true">◉</span><span>TPMS</span></a>
+      </nav>
+
+      <section id="tpms-panel" class="glass rounded-[26px] p-4 sm:p-6" aria-label="Motorhome TPMS overview">
+        <div class="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div><p class="caps text-[9px] text-cyan-100/70">TPMS · FOUR CORNERS</p><h2 class="mt-1 text-2xl font-semibold sm:text-3xl">Road ready tyre watch</h2><p class="mt-1 text-sm muted">The pointer cards follow each wheel. Far-side sensors are shown above the van.</p></div>
+          <div class="soft rounded-xl px-3 py-2 text-right"><p class="caps text-[8px] muted">THRESHOLD</p><p class="text-sm text-emerald-200">55-65 PSI cruising zone</p></div>
+        </div>
+
+        <div class="tpms-stage relative min-h-[620px] overflow-hidden rounded-[22px] border border-white/5 bg-[radial-gradient(ellipse_at_center,#16334f99,#061321dd_72%)] p-3 sm:min-h-[680px]">
+          <div class="vehicle-art">
+            <div class="pointer-events-none absolute inset-x-[10%] bottom-[8%] h-24 rounded-[50%] bg-cyan-400/10 blur-3xl"></div>
+            <img src="./outputs/motorhome-home.webp?v=2" alt="Class B motorhome with four wheel positions">
+            <span class="wheel-target wheel-rear-near" aria-hidden="true"></span><span class="wheel-target wheel-front-near" aria-hidden="true"></span>
+            <span class="wheel-target far wheel-rear-far" aria-hidden="true"></span><span class="wheel-target far wheel-front-far" aria-hidden="true"></span>
+          </div>
+
+          <article class="tpms-card rear-far far glass rounded-2xl p-3" aria-label="Rear far side TPMS">
+            <p class="caps text-[8px] text-amber-100/75">LEFT REAR · FAR SIDE</p><h3 class="mt-1 font-medium">Left rear</h3>
+            <div class="mt-2 grid grid-cols-2 gap-2"><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">PRESSURE</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_rear_left_pressure" data-format="number">--</span><small class="ml-1 text-[10px] muted">psi</small></p></div><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">TEMP</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_rear_left_temperature" data-format="number">--</span><small class="ml-1 text-[10px] muted">°C</small></p></div></div>
+          </article>
+
+          <article class="tpms-card front-far far glass rounded-2xl p-3" aria-label="Front far side TPMS">
+            <p class="caps text-[8px] text-amber-100/75">LEFT FRONT · FAR SIDE</p><h3 class="mt-1 font-medium">Left front</h3>
+            <div class="mt-2 grid grid-cols-2 gap-2"><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">PRESSURE</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_front_left_pressure" data-format="number">--</span><small class="ml-1 text-[10px] muted">psi</small></p></div><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">TEMP</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_front_left_temperature" data-format="number">--</span><small class="ml-1 text-[10px] muted">°C</small></p></div></div>
+          </article>
+
+          <article class="tpms-card rear-near glass rounded-2xl p-3" aria-label="Rear near side TPMS">
+            <p class="caps text-[8px] text-cyan-100/75">RIGHT REAR · NEAR SIDE</p><h3 class="mt-1 font-medium">Right rear</h3>
+            <div class="mt-2 grid grid-cols-2 gap-2"><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">PRESSURE</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_rear_right_pressure" data-format="number">--</span><small class="ml-1 text-[10px] muted">psi</small></p></div><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">TEMP</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_rear_right_temperature" data-format="number">--</span><small class="ml-1 text-[10px] muted">°C</small></p></div></div>
+          </article>
+
+          <article class="tpms-card front-near glass rounded-2xl p-3" aria-label="Front near side TPMS">
+            <p class="caps text-[8px] text-cyan-100/75">RIGHT FRONT · NEAR SIDE</p><h3 class="mt-1 font-medium">Right front</h3>
+            <div class="mt-2 grid grid-cols-2 gap-2"><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">PRESSURE</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_front_right_pressure" data-format="number">--</span><small class="ml-1 text-[10px] muted">psi</small></p></div><div class="soft rounded-lg p-2"><p class="caps text-[7px] muted">TEMP</p><p class="mt-1 text-lg"><span data-entity="sensor.motorhome_tpms_front_right_temperature" data-format="number">--</span><small class="ml-1 text-[10px] muted">°C</small></p></div></div>
+          </article>
+
+        </div>
+        <div class="receiver-card glass mt-3 rounded-2xl border-cyan-200/20 p-3 shadow-[0_0_35px_#43d9ff22]" aria-label="TPMS receiver details">
+          <div class="receiver-icon hidden h-10 w-10 place-items-center rounded-full bg-cyan-300/10 text-xl text-cyan-200">⚡</div>
+          <p class="receiver-label caps text-[8px] text-cyan-100/75">RECEIVER</p>
+          <h3 class="font-medium">ATOTO AC-UTP1</h3>
+          <p class="receiver-meta text-[10px] muted">USB · 19200 8N1 · 4 channels</p>
+          <p class="receiver-status text-[10px] text-emerald-200">● ONLINE</p>
+          <p class="receiver-reading text-[10px] muted">Last valid reading <span class="text-slate-100" data-entity="sensor.motorhome_tpms_front_right_pressure" data-format="number">--</span> psi</p>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="./app.js?v=20261005-tpms-layout-v1"></script>
+</body>
+</html>

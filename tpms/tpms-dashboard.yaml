@@ -1,0 +1,153 @@
+title: TPMS • Road Ready
+views:
+  - title: TPMS
+    path: tpms
+    icon: mdi:tire
+    type: masonry
+    cards:
+      - type: markdown
+        content: |
+          # 🚌 ROAD READY
+          ## Motorhome tyre watch
+          Live pressure and temperature from the ATOTO receiver.
+
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_front_right_pressure
+                state_not: unknown
+              - entity: sensor.motorhome_tpms_front_right_pressure
+                state_not: unavailable
+            card:
+              type: gauge
+              entity: sensor.motorhome_tpms_front_right_pressure
+              name: FRONT RIGHT • ID 10
+              unit: PSI
+              min: 0
+              max: 50
+              severity:
+                green: 22
+                yellow: 18
+                red: 0
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_front_right_pressure
+                state: unknown
+            card:
+              type: markdown
+              content: "## 🛞 FRONT RIGHT · ID 10\n**Waiting for sensor…**"
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_front_right_pressure
+                state: unavailable
+            card:
+              type: markdown
+              content: "## 🛞 FRONT RIGHT · ID 10\n**Waiting for sensor…**"
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_rear_right_pressure
+                state_not: unknown
+              - entity: sensor.motorhome_tpms_rear_right_pressure
+                state_not: unavailable
+            card:
+              type: gauge
+              entity: sensor.motorhome_tpms_rear_right_pressure
+              name: REAR RIGHT • ID 11
+              unit: PSI
+              min: 0
+              max: 50
+              severity:
+                green: 22
+                yellow: 18
+                red: 0
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_rear_right_pressure
+                state: unknown
+            card:
+              type: markdown
+              content: "## 🛞 REAR RIGHT · ID 11\n**Waiting for sensor…**"
+          - type: conditional
+            conditions:
+              - entity: sensor.motorhome_tpms_rear_right_pressure
+                state: unavailable
+            card:
+              type: markdown
+              content: "## 🛞 REAR RIGHT · ID 11\n**Waiting for sensor…**"
+
+      - type: markdown
+        content: |
+          ## 🛞 Wheel bay
+          Green is the cruising zone • amber means check soon • red means stop and inspect.
+
+      - type: grid
+        columns: 3
+        square: false
+        cards:
+          - type: tile
+            entity: sensor.motorhome_tpms_front_left_pressure
+            name: FRONT LEFT • ID 00
+            icon: mdi:tire
+            color: blue
+            vertical: true
+            features_position: bottom
+          - type: markdown
+            content: |
+              <div style="text-align:center;font-size:3em;padding-top:20px">🚌</div>
+              <div style="text-align:center"><b>MOTORHOME</b><br>TPMS LIVE</div>
+          - type: tile
+            entity: sensor.motorhome_tpms_front_right_pressure
+            name: FRONT RIGHT • ID 10
+            icon: mdi:tire
+            color: green
+            vertical: true
+            features_position: bottom
+          - type: tile
+            entity: sensor.motorhome_tpms_rear_left_pressure
+            name: REAR LEFT • ID 01
+            icon: mdi:tire
+            color: purple
+            vertical: true
+            features_position: bottom
+          - type: markdown
+            content: |
+              <div style="text-align:center;padding:16px 0;font-size:1.2em">⚡<br><b>ATOTO AC-UTP1</b><br><small>USB receiver online</small></div>
+          - type: tile
+            entity: sensor.motorhome_tpms_rear_right_pressure
+            name: REAR RIGHT • ID 11
+            icon: mdi:tire
+            color: orange
+            vertical: true
+            features_position: bottom
+
+      - type: grid
+        columns: 2
+        square: false
+        cards:
+          - type: entities
+            title: 🌡️ Temperatures
+            state_color: true
+            entities:
+              - entity: sensor.motorhome_tpms_front_right_temperature
+                name: Front right • ID 10
+              - entity: sensor.motorhome_tpms_rear_right_temperature
+                name: Rear right • ID 11
+              - entity: sensor.motorhome_tpms_front_left_temperature
+                name: Front left • ID 00
+              - entity: sensor.motorhome_tpms_rear_left_temperature
+                name: Rear left • ID 01
+          - type: entities
+            title: 📡 Receiver
+            entities:
+              - entity: sensor.motorhome_tpms_front_right_pressure
+                name: Last valid pressure
+              - entity: sensor.motorhome_tpms_front_right_temperature
+                name: Last valid temperature
+
+      - type: markdown
+        content: |
+          ### 🧭 Before rolling
+          Check all four tyres cold. The receiver may report a sensor as unavailable until that sensor transmits a valid pressure frame.
